@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Daily AI Knowledge Base Updater
-Uploads 1-3 random markdown files to the GitHub repository daily
+Daily AI Knowledge Base Updater - Customized for Java Agent Interviews & AI News
+Uploads 2 Java agent development interview files + 1 AI news file daily
 """
 
 import os
@@ -13,9 +13,9 @@ WORKSPACE_DIR = "/Users/tyler/.openclaw/workspace"
 KNOWLEDGE_BASE_DIR = f"{WORKSPACE_DIR}/ai-knowledge-base"
 EXCLUDED_FILES = {"README.md", "SETUP.md", "TODO.md", "LICENSE"}
 
-def find_markdown_files():
-    """Find all markdown files in workspace, excluding specified files."""
-    markdown_files = []
+def find_java_agent_interview_files():
+    """Find Java agent development interview question files."""
+    java_files = []
     for root, dirs, files in os.walk(WORKSPACE_DIR):
         # Skip hidden directories and ai-knowledge-base itself
         dirs[:] = [d for d in dirs if not d.startswith('.') and d != 'ai-knowledge-base']
@@ -23,14 +23,52 @@ def find_markdown_files():
         for file in files:
             if file.endswith('.md') and file not in EXCLUDED_FILES:
                 full_path = os.path.join(root, file)
-                markdown_files.append(full_path)
-    return markdown_files
+                # Look for files containing Java agent interview content
+                if os.path.isfile(full_path):
+                    with open(full_path, 'r', encoding='utf-8', errors='ignore') as f:
+                        content = f.read().lower()
+                        if any(keyword in content for keyword in ['java', 'agent', 'interview', '面试', '开发']):
+                            if 'interview' in content or '面试' in content:
+                                java_files.append(full_path)
+    return java_files
 
-def select_files_to_upload(available_files, count=3):
-    """Randomly select files to upload."""
-    if len(available_files) <= count:
-        return available_files
-    return random.sample(available_files, count)
+def find_ai_news_files():
+    """Find AI news files with hot topics."""
+    news_files = []
+    for root, dirs, files in os.walk(WORKSPACE_DIR):
+        # Skip hidden directories and ai-knowledge-base itself
+        dirs[:] = [d for d in dirs if not d.startswith('.') and d != 'ai-knowledge-base']
+        
+        for file in files:
+            if file.endswith('.md') and file not in EXCLUDED_FILES:
+                full_path = os.path.join(root, file)
+                # Look for files containing AI news content
+                if os.path.isfile(full_path):
+                    with open(full_path, 'r', encoding='utf-8', errors='ignore') as f:
+                        content = f.read().lower()
+                        if any(keyword in content for keyword in ['ai news', 'tech news', '热门', 'hot', 'news', '新闻']):
+                            # Exclude files that are just configuration or setup
+                            if not any(exclude in file.lower() for exclude in ['setup', 'config', 'cron', 'script']):
+                                news_files.append(full_path)
+    return news_files
+
+def select_files_to_upload(java_files, news_files, java_count=2, news_count=1):
+    """Select specific counts of Java interview and AI news files."""
+    selected = []
+    
+    # Select Java agent interview files
+    if len(java_files) <= java_count:
+        selected.extend(java_files)
+    else:
+        selected.extend(random.sample(java_files, java_count))
+    
+    # Select AI news files
+    if len(news_files) <= news_count:
+        selected.extend(news_files)
+    else:
+        selected.extend(random.sample(news_files, news_count))
+    
+    return selected
 
 def copy_to_knowledge_base(files):
     """Copy selected files to knowledge base with proper categorization."""
@@ -58,13 +96,23 @@ def determine_category(filename, filepath):
     """Determine the category for a file based on its content and name."""
     filename_lower = filename.lower()
     
-    # Category mappings
-    if any(keyword in filename_lower for keyword in ['interview', 'question', 'leetcode']):
+    # Read file content for better categorization
+    if os.path.isfile(filepath):
+        with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+            content = f.read().lower()
+    else:
+        content = ""
+    
+    # Category mappings - prioritize Java agent interviews
+    if any(keyword in content for keyword in ['java', 'agent', 'interview', '面试']) or \
+       any(keyword in filename_lower for keyword in ['java', 'agent', 'interview', '面试']):
         return 'interview-preparation'
     elif any(keyword in filename_lower for keyword in ['rag', 'llm', 'nlp', 'language', 'transformer']):
         return 'nlp'
     elif any(keyword in filename_lower for keyword in ['vision', 'image', 'computer', 'cv']):
         return 'computer-vision'
+    elif any(keyword in filename_lower for keyword in ['news', 'hot', '热门', 'ai news', 'tech news']):
+        return 'ai-news'
     elif any(keyword in filename_lower for keyword in ['ml', 'machine', 'learning', 'algorithm']):
         return 'machine-learning'
     elif any(keyword in filename_lower for keyword in ['deep', 'neural', 'network', 'cnn', 'rnn']):
@@ -90,7 +138,7 @@ def git_commit_and_push():
         
         # Create commit message
         date_str = datetime.now().strftime("%Y-%m-%d")
-        commit_msg = f"Daily update: {date_str} - Added AI knowledge base documents"
+        commit_msg = f"Daily update: {date_str} - Java Agent Interviews & AI News"
         
         # Commit
         subprocess.run(f"git commit -m '{commit_msg}'", shell=True)
@@ -106,24 +154,30 @@ def git_commit_and_push():
 
 def main():
     """Main function to run daily update."""
-    print(f"Starting daily AI Knowledge Base update: {datetime.now()}")
+    print(f"Starting AI Knowledge Base update: {datetime.now()}")
+    print("Focus: 2 Java Agent Interview files + 1 AI News file")
     
     # Change to workspace directory
     os.chdir(WORKSPACE_DIR)
     
-    # Find markdown files
-    available_files = find_markdown_files()
-    print(f"Found {len(available_files)} available markdown files")
+    # Find specific file types
+    java_files = find_java_agent_interview_files()
+    news_files = find_ai_news_files()
     
-    if not available_files:
-        print("No files to upload")
+    print(f"Found {len(java_files)} Java agent interview files")
+    print(f"Found {len(news_files)} AI news files")
+    
+    if not java_files and not news_files:
+        print("No matching files to upload")
         return
     
-    # Select files to upload
-    files_to_upload = select_files_to_upload(available_files, min(3, len(available_files)))
+    # Select files to upload (2 Java + 1 AI news)
+    files_to_upload = select_files_to_upload(java_files, news_files, java_count=2, news_count=1)
+    
     print(f"Selected {len(files_to_upload)} files for upload:")
     for file in files_to_upload:
-        print(f"  - {os.path.basename(file)}")
+        file_type = "Java Agent Interview" if file in java_files else "AI News"
+        print(f"  - [{file_type}] {os.path.basename(file)}")
     
     # Copy files to knowledge base
     copied_files = copy_to_knowledge_base(files_to_upload)
@@ -134,6 +188,7 @@ def main():
     
     if success:
         print("✓ Daily update completed successfully")
+        print("📊 Summary: 2 Java Agent Interviews + 1 AI News uploaded")
     else:
         print("Daily update completed (no changes)")
 
