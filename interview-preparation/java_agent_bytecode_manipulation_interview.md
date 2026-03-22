@@ -1,36 +1,35 @@
-# Java Agent Interview Question: Bytecode Manipulation
+# Java Agent面试题：Bytecode Manipulation
 
-## Question
-Compare ASM, ByteBuddy, and Javassist for bytecode manipulation in Java Agents.
+## 问题
+在Java Agent开发中，bytecode manipulation有哪些关键考虑因素？
 
-## Detailed Answer
-**ASM**:
-- Pros: High performance, low-level control, widely used
-- Cons: Requires understanding of JVM bytecode, verbose API
-- Best for: Performance-critical agents, fine-grained control
+## 详细解答
+Bytecode Manipulation在Java Agent开发中的关键考虑因素：
 
-**ByteBuddy**:
-- Pros: High-level API, easy to use, good documentation
-- Cons: Slightly higher overhead than ASM
-- Best for: Rapid development, readability
+1. **性能影响**: 最小化应用启动和运行时的开销
+2. **兼容性**: 确保与不同JVM版本和框架的兼容性
+3. **错误处理**: 健壮的错误处理以防止应用失败
+4. **资源管理**: 适当清理资源和转换器
+5. **安全性**: 考虑字节码修改的安全影响
+6. **测试**: 跨不同环境的全面测试
 
-**Javassist**:
-- Pros: Source-level abstraction, simple API
-- Cons: Performance overhead, limited features
-- Best for: Simple transformations, quick prototyping
+**最佳实践**:
+- 使用合适的字节码操作库
+- 实现适当的错误处理和回退机制
+- 监控生产环境中的代理性能
+- 保持转换最小化且聚焦
+- 记录所有修改及其目的
 
-**Recommendation**: Use ByteBuddy for most cases due to balance of performance and usability.
+## 关键要点
+- 核心概念的理解
+- 实际实现经验
+- 性能考虑
+- 常见陷阱和解决方案
 
-## Key Points to Remember
-- Understanding of core concepts
-- Practical implementation experience
-- Performance considerations
-- Common pitfalls and solutions
-
-## Follow-up Topics
-- Related concepts and advanced topics
-- Real-world application scenarios
-- Comparison with alternative approaches
+## 后续话题
+- 相关概念和高级主题
+- 实际应用场景
+- 与其他方案的对比
 
 ---
-*Generated on 2026-03-22 18:17:44*
+*生成时间：2026-03-22 18:21:18*

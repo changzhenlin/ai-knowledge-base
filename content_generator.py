@@ -28,48 +28,44 @@ class ContentGenerator:
         
         date_str = date.strftime("%Y-%m-%d")
         
-        # Simulate AI news generation (in real implementation, this would fetch from APIs)
-        # For now, we'll create a template-based news article
-        
+        # AI新闻主题（中文）
         news_topics = [
-            "LLM Model Updates and Releases",
-            "AI Ethics and Responsible AI Development",
-            "Machine Learning Framework Improvements",
-            "AI in Industry Applications",
-            "Research Breakthroughs in Deep Learning",
-            "AI Policy and Regulation Updates"
+            "大语言模型更新与发布",
+            "AI伦理与负责任AI发展",
+            "机器学习框架改进",
+            "AI行业应用",
+            "深度学习研究突破",
+            "AI政策与监管更新"
         ]
         
         selected_topic = random.choice(news_topics)
         
-        news_content = f"""# AI News Summary - {date_str}
+        news_content = f"""# AI新闻摘要 - {date_str}
 
 ## {selected_topic}
 
-### Overview
-Latest developments and updates in the AI field for {date_str}.
+### 概述
+{date_str} AI领域的最新发展和更新。
 
-### Key Highlights
-- New research papers and implementations
-- Industry adoption trends
-- Technical advancements and optimizations
+### 主要亮点
+- 新的研究论文和实现
+- 行业采用趋势
+- 技术进步和优化
 
-### Details
-This summary covers the most significant AI developments from the past 24 hours, 
-focusing on practical applications and technical innovations relevant to developers 
-and researchers.
+### 详细内容
+本摘要涵盖过去24小时最重要的AI发展，重点关注与开发人员和研究者相关的实际应用和技术创新。
 
-### Impact
-- Potential influence on development practices
-- New opportunities for AI integration
-- Considerations for enterprise adoption
+### 影响
+- 对开发实践的潜在影响
+- AI集成的新机会
+- 企业采用注意事项
 
 ---
-*Generated on {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
+*生成时间：{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
 """
         
         return {
-            'title': f"AI News Summary - {date_str}",
+            'title': f"AI新闻摘要 - {date_str}",
             'filename': f"ai_news_{date_str}.md",
             'content': news_content,
             'category': 'ai-news'
@@ -79,16 +75,16 @@ and researchers.
         """Generate a Java Agent development interview question with answer."""
         
         topics = [
-            "Java Agent Instrumentation",
-            "Bytecode Manipulation",
-            "Class Loading in Java Agents",
-            "JVM TI and Java Agents",
-            "Performance Monitoring with Java Agents",
-            "Profiling and Observability",
-            "Java Agent Best Practices",
-            "Debugging Java Agents",
-            "Spring Boot Integration",
-            "Microservices Monitoring"
+            "Java Agent字节码插桩",
+            "字节码操作技术",
+            "Java Agent中的类加载",
+            "JVM TI与Java Agents",
+            "Java Agent性能监控",
+            "性能分析与可观测性",
+            "Java Agent最佳实践",
+            "Java Agent调试技巧",
+            "Spring Boot集成",
+            "微服务监控"
         ]
         
         if topic is None:
@@ -96,23 +92,23 @@ and researchers.
         
         # Generate different types of questions based on topic
         questions = {
-            "Java Agent Instrumentation": {
-                "question": "How does Java Agent instrumentation work, and what are the key components involved?",
-                "answer": """Java Agent instrumentation works through the Java Instrumentation API, which allows agents to modify class bytecode during class loading.
+            "Java Agent字节码插桩": {
+                "question": "Java Agent字节码插桩是如何工作的？涉及哪些关键组件？",
+                "answer": """Java Agent字节码插桩通过Java Instrumentation API实现，允许代理在类加载期间修改类字节码。
 
-Key components:
-1. **Instrumentation Agent**: The main agent class with `premain` method
-2. **ClassFileTransformer**: Interface for transforming class bytecode
-3. **Byte Code Manipulation Libraries**: ASM, ByteBuddy, or Javassist
-4. **JVM Hooks**: JVM provides hooks for class loading events
+关键组件：
+1. **Instrumentation Agent**: 包含`premain`方法的主代理类
+2. **ClassFileTransformer**: 用于转换类字节码的接口
+3. **字节码操作库**: ASM、ByteBuddy或Javassist
+4. **JVM钩子**: JVM提供的类加载事件钩子
 
-The process:
-- Agent is specified with `-javaagent` JVM parameter
-- `premain` method is called before main application starts
-- Transformers are registered to modify classes as they're loaded
-- Bytecode can be modified before class definition
+工作流程：
+- 通过`-javaagent` JVM参数指定代理
+- `premain`方法在应用主程序启动前被调用
+- 注册转换器来修改加载的类
+- 在类定义前可以修改字节码
 
-**Example**:
+**示例代码**:
 ```java
 public class MyAgent {
     public static void premain(String args, Instrumentation inst) {
@@ -121,100 +117,100 @@ public class MyAgent {
 }
 ```"""
             },
-            "Bytecode Manipulation": {
-                "question": "Compare ASM, ByteBuddy, and Javassist for bytecode manipulation in Java Agents.",
+            "字节码操作技术": {
+                "question": "请对比ASM、ByteBuddy和Javassist在Java Agent字节码操作中的优缺点。",
                 "answer": """**ASM**:
-- Pros: High performance, low-level control, widely used
-- Cons: Requires understanding of JVM bytecode, verbose API
-- Best for: Performance-critical agents, fine-grained control
+- 优点：高性能、底层控制、广泛使用
+- 缺点：需要理解JVM字节码、API较为繁琐
+- 适用场景：性能关键的代理、需要精细控制
 
 **ByteBuddy**:
-- Pros: High-level API, easy to use, good documentation
-- Cons: Slightly higher overhead than ASM
-- Best for: Rapid development, readability
+- 优点：高级API、易于使用、文档完善
+- 缺点：相比ASM开销稍大
+- 适用场景：快速开发、代码可读性要求高
 
 **Javassist**:
-- Pros: Source-level abstraction, simple API
-- Cons: Performance overhead, limited features
-- Best for: Simple transformations, quick prototyping
+- 优点：源码级抽象、API简单
+- 缺点：性能开销较大、功能有限
+- 适用场景：简单转换、快速原型开发
 
-**Recommendation**: Use ByteBuddy for most cases due to balance of performance and usability."""
+**推荐**: 大多数情况下使用ByteBuddy，因为其在性能和易用性之间取得了良好平衡。"""
             },
-            "Class Loading in Java Agents": {
-                "question": "How do Java Agents interact with class loading, and what are the timing considerations?",
-                "answer": """Java Agents interact with class loading through several mechanisms:
+            "Java Agent中的类加载": {
+                "question": "Java Agent如何与类加载机制交互？有哪些时序考虑？",
+                "answer": """Java Agent通过以下几种机制与类加载交互：
 
-**1. Class File Transformation**:
-- Agents can modify class bytecode before class is defined
-- Occurs during `ClassFileTransformer.transform()` call
-- Transformation happens only once per class
+**1. 类文件转换**:
+- 代理可以在类定义前修改类字节码
+- 发生在`ClassFileTransformer.transform()`调用期间
+- 每个类仅转换一次
 
-**2. Timing Considerations**:
-- **Premain**: Called before any application classes are loaded
-- **Agentmain**: Can be loaded into running JVM (requires JVM support)
-- **Class Loading Order**: System classes load first, then application classes
+**2. 时序考虑**:
+- **Premain**: 在任何应用类加载前被调用
+- **Agentmain**: 可以加载到运行的JVM中（需要JVM支持）
+- **类加载顺序**: 系统类先加载，然后是应用类
 
-**3. Important Points**:
-- Can only transform classes that haven't been loaded yet
-- Some JVM classes cannot be transformed for security reasons
-- Circular dependencies can cause issues
-- Transformer performance affects application startup
+**3. 重要要点**:
+- 只能转换尚未加载的类
+- 某些JVM类因安全原因无法转换
+- 循环依赖可能导致问题
+- 转换器性能影响应用启动
 
-**4. Best Practices**:
-- Register transformers early in `premain`
-- Avoid heavy processing in transformers
-- Use caching for frequently accessed classes"""
+**4. 最佳实践**:
+- 在`premain`中尽早注册转换器
+- 避免在转换器中进行重处理
+- 对频繁访问的类使用缓存"""
             }
         }
         
         # Use template for topics not specifically defined
         if topic not in questions:
             questions[topic] = {
-                "question": f"What are the key considerations for {topic.lower()} in Java Agent development?",
-                "answer": f"""Key considerations for {topic} in Java Agent development:
+                "question": f"在Java Agent开发中，{topic.lower()}有哪些关键考虑因素？",
+                "answer": f"""{topic}在Java Agent开发中的关键考虑因素：
 
-1. **Performance Impact**: Minimize overhead on application startup and runtime
-2. **Compatibility**: Ensure compatibility with different JVM versions and frameworks
-3. **Error Handling**: Robust error handling to prevent application failures
-4. **Resource Management**: Proper cleanup of resources and transformers
-5. **Security**: Consider security implications of bytecode modification
-6. **Testing**: Comprehensive testing across different environments
+1. **性能影响**: 最小化应用启动和运行时的开销
+2. **兼容性**: 确保与不同JVM版本和框架的兼容性
+3. **错误处理**: 健壮的错误处理以防止应用失败
+4. **资源管理**: 适当清理资源和转换器
+5. **安全性**: 考虑字节码修改的安全影响
+6. **测试**: 跨不同环境的全面测试
 
-**Best Practices**:
-- Use appropriate bytecode manipulation libraries
-- Implement proper error handling and fallbacks
-- Monitor agent performance in production
-- Keep transformations minimal and focused
-- Document all modifications and their purposes"""
+**最佳实践**:
+- 使用合适的字节码操作库
+- 实现适当的错误处理和回退机制
+- 监控生产环境中的代理性能
+- 保持转换最小化且聚焦
+- 记录所有修改及其目的"""
             }
         
         qa = questions[topic]
         
-        content = f"""# Java Agent Interview Question: {topic}
+        content = f"""# Java Agent面试题：{topic}
 
-## Question
+## 问题
 {qa['question']}
 
-## Detailed Answer
+## 详细解答
 {qa['answer']}
 
-## Key Points to Remember
-- Understanding of core concepts
-- Practical implementation experience
-- Performance considerations
-- Common pitfalls and solutions
+## 关键要点
+- 核心概念的理解
+- 实际实现经验
+- 性能考虑
+- 常见陷阱和解决方案
 
-## Follow-up Topics
-- Related concepts and advanced topics
-- Real-world application scenarios
-- Comparison with alternative approaches
+## 后续话题
+- 相关概念和高级主题
+- 实际应用场景
+- 与其他方案的对比
 
 ---
-*Generated on {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
+*生成时间：{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
 """
         
         return {
-            'title': f"Java Agent Interview - {topic}",
+            'title': f"Java Agent面试题 - {topic}",
             'filename': f"java_agent_{topic.lower().replace(' ', '_')}_interview.md",
             'content': content,
             'category': 'interview-preparation'
