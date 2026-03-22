@@ -1,17 +1,26 @@
 #!/usr/bin/env python3
 """
 Daily AI Knowledge Base Updater - Customized for Java Agent Interviews & AI News
-Uploads 2 Java agent development interview files + 1 AI news file daily
+Generates and uploads 2 Java agent development interview files + 1 AI news file daily
 """
 
 import os
 import random
 import subprocess
-from datetime import datetime
+from datetime import datetime, timedelta
 
 WORKSPACE_DIR = "/Users/tyler/.openclaw/workspace"
 KNOWLEDGE_BASE_DIR = f"{WORKSPACE_DIR}/ai-knowledge-base"
 EXCLUDED_FILES = {"README.md", "SETUP.md", "TODO.md", "LICENSE"}
+
+# Import content generator
+import sys
+sys.path.append(KNOWLEDGE_BASE_DIR)
+try:
+    from content_generator import ContentGenerator
+except ImportError:
+    print("Warning: ContentGenerator not found, will only process existing files")
+    ContentGenerator = None
 
 def find_java_agent_interview_files():
     """Find Java agent development interview question files."""
@@ -152,15 +161,53 @@ def git_commit_and_push():
         print("No changes to commit")
         return False
 
+def generate_daily_content():
+    """Generate today's AI news and Java Agent interview content."""
+    if ContentGenerator is None:
+        print("ContentGenerator not available, skipping content generation")
+        return []
+    
+    print("Generating daily content...")
+    generator = ContentGenerator()
+    
+    # Generate yesterday's AI news (for daily summary)
+    yesterday = datetime.now() - timedelta(days=1)
+    ai_news = generator.generate_ai_news(yesterday)
+    
+    # Generate 2-3 Java Agent interview questions
+    java_questions = []
+    topics = [
+        "Java Agent Instrumentation", 
+        "Bytecode Manipulation",
+        "Class Loading in Java Agents"
+    ]
+    
+    # Select 2-3 random topics
+    selected_topics = random.sample(topics, min(3, len(topics)))
+    
+    for topic in selected_topics:
+        java_questions.append(generator.generate_java_agent_interview_question(topic))
+    
+    # Save all generated content
+    all_content = [ai_news] + java_questions
+    generated_files = generator.save_generated_content(all_content)
+    
+    print(f"Generated {len(generated_files)} new files")
+    return generated_files
+
+
 def main():
     """Main function to run daily update."""
     print(f"Starting AI Knowledge Base update: {datetime.now()}")
-    print("Focus: 2 Java Agent Interview files + 1 AI News file")
+    print("Focus: 2-3 Java Agent Interview files + 1 AI News file")
     
     # Change to workspace directory
     os.chdir(WORKSPACE_DIR)
     
-    # Find specific file types
+    # Generate today's content first
+    generated_files = generate_daily_content()
+    
+    # Find specific file types (including newly generated ones)
     java_files = find_java_agent_interview_files()
     news_files = find_ai_news_files()
     
