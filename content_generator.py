@@ -24,7 +24,7 @@ class ContentGenerator:
     def generate_ai_news(self, date: datetime = None) -> Dict:
         """Generate AI news summary for a specific date."""
         if date is None:
-            date = datetime.now() - timedelta(days=1)  # Yesterday
+            date = datetime.now()  # Today
         
         date_str = date.strftime("%Y-%m-%d")
         
